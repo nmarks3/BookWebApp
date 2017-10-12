@@ -62,7 +62,7 @@ public class AuthorController extends HttpServlet {
             if(action.equalsIgnoreCase(LIST_ACTION)) {
                 authorList = authorService.getAuthorList();
                 request.setAttribute("authorList", authorList);
-            }
+            } 
             
         } catch(Exception e) {
             destination = "/authorList.jsp";
@@ -75,6 +75,11 @@ public class AuthorController extends HttpServlet {
 
     }
 
+    // use if statements for actionresults ex edit? or delete?
+    
+    // url AuthorController?action=create&authorName=Bob%20Smith
+    // date added is a new date();
+    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

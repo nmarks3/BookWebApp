@@ -12,8 +12,6 @@ import java.util.List;
  */
 public class AuthorService {
     private IAuthorDao authorDao;
-    private final String AUTHOR_TBL = "author";
-    private final String AUTHOR_PK = "author_id";
 
     public AuthorService(IAuthorDao authorDao) {
         setAuthorDao(authorDao);
@@ -30,6 +28,15 @@ public class AuthorService {
         Integer value = Integer.parseInt(id);
 
         return authorDao.removeAuthorById(value);
+    }
+    
+    public int addAuthor(List<Object> colValues) throws SQLException, ClassNotFoundException{
+        
+        return authorDao.addAuthor(colValues);
+    }
+    
+    public int updateAuthorById(List <Object> colValues, int id) throws SQLException, ClassNotFoundException{   
+        return authorDao.updateAuthor(colValues, id);
     }
 
     public List<Author> getAuthorList()
@@ -59,7 +66,9 @@ public class AuthorService {
         AuthorService authorService
                 = new AuthorService(dao);
         
-        int recsDeleted = authorService.removeAuthorById("53");
+        //authorService.addAuthor(Arrays.asList("ralph the thrid", "2012-03-13"));
+        authorService.updateAuthorById(Arrays.asList("jakob the great", "2013-12-12"), 9);
+        //authorService.removeAuthorById("53");
 
         List<Author> list = authorService.getAuthorList();
 

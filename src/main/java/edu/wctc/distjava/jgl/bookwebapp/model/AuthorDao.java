@@ -1,6 +1,8 @@
 package edu.wctc.distjava.jgl.bookwebapp.model;
 
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +14,8 @@ import java.util.Vector;
  * @author jlombardo
  */
 public class AuthorDao implements IAuthorDao {
+    Date date = new Date();
+    
     private String driverClass;
     private String url;
     private String userName;
@@ -19,6 +23,8 @@ public class AuthorDao implements IAuthorDao {
     private DataAccess db;
     private final String AUTHOR_TBL = "author";
     private final String AUTHOR_PK = "author_id";
+    private final String AUTHOR_NAME = "author_name";
+    private final String DATE_ADDED = "date_added";
 
     public AuthorDao(String driverClass, String url, String userName, String password, DataAccess db) {
         
@@ -29,8 +35,13 @@ public class AuthorDao implements IAuthorDao {
         setDb(db);
     }
     ///homework 
-    public int addAuthor(List<String> colName, List<Object> colValues) {
-        
+    public final int addAuthor(List<Object> colValues) throws ClassNotFoundException, SQLException {
+         db.openConnection(driverClass, url, userName, password);
+         String tableName = "author";
+         int authorsAdded = db.createRecord(AUTHOR_TBL,Arrays.asList(AUTHOR_NAME, DATE_ADDED), colValues);
+         db.closeConnection();
+         
+         return authorsAdded;
     }
     
     public final int removeAuthorById(Integer id) throws ClassNotFoundException, SQLException {
@@ -46,6 +57,14 @@ public class AuthorDao implements IAuthorDao {
         
         return recsDeleted;
     }
+    
+    public final int updateAuthor(List<Object> colValue, Object pkValue ) throws SQLException, ClassNotFoundException{
+        db.openConnection(driverClass, url, userName, password);
+        int recsUpdated = db.updateRecord(AUTHOR_TBL, Arrays.asList(AUTHOR_NAME, DATE_ADDED), colValue, AUTHOR_PK, pkValue);
+        db.closeConnection();
+        return recsUpdated;
+    }
+    
     
     @Override
     public final List<Author> getListOfAuthors() 
@@ -129,11 +148,13 @@ public class AuthorDao implements IAuthorDao {
         IAuthorDao dao = new AuthorDao(
             "com.mysql.jdbc.Driver",
             "jdbc:mysql://localhost:3306/book",
-            "root", "admin",
+            "root", "root",
             new MySqlDataAccess()
         );
         
-        int recsDeleted = dao.removeAuthorById(20);
+       // int recsDeleted = dao.removeAuthorById(20);
+   dao.addAuthor(Arrays.asList("jes r j ", "2030-02-11"));
+       // dao.updateAuthor(Arrays.asList("Brian Thomas", "2017-09-23"), 7);
         List<Author> list = dao.getListOfAuthors();
         
         for(Author a: list) {

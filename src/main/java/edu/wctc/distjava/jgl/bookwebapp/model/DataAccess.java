@@ -11,8 +11,9 @@ import java.util.Map;
 public interface DataAccess {
     
     public abstract int createRecord(String tableName, List<String> colNames, 
-            List<Object> colValues) throws SQLException;
+            List<Object> colValues) throws ClassNotFoundException, SQLException ;
 
+public int updateRecord(String tableName, List<String> colNames, List<Object> colValues, String pkColName, Object pkValue) throws SQLException;    
     void closeConnection() throws SQLException;
 
     /**
