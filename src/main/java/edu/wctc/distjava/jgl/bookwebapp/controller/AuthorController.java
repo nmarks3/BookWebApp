@@ -12,6 +12,9 @@ import edu.wctc.distjava.jgl.bookwebapp.model.IAuthorDao;
 import edu.wctc.distjava.jgl.bookwebapp.model.MySqlDataAccess;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -27,7 +30,14 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "AuthorController", urlPatterns = {"/authorController"})
 public class AuthorController extends HttpServlet {
     public static final String ACTION = "action";
+    public static final String AUTHOR_ID = "id";
     public static final String LIST_ACTION = "list";
+    public static final String DELETE_ACTION = "delete";
+    public static final String ADD_ACTION = "add";
+    public static final String UPDATE_ACTION = "update";
+    public static final String AUTHOR_NAME = "name";
+    
+    
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,11 +51,16 @@ public class AuthorController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
+        
         String destination = "/authorList.jsp"; // default
         
         try {
             String action = request.getParameter(ACTION);
+            String id = request.getParameter(AUTHOR_ID);
+            String name = request.getParameter(AUTHOR_NAME);
+            
+            Date date = new Date();
+            String DATE = new SimpleDateFormat("yyyy-MM-dd").format(date);
             
             IAuthorDao dao = new AuthorDao(
                 "com.mysql.jdbc.Driver",
@@ -54,15 +69,34 @@ public class AuthorController extends HttpServlet {
                 new MySqlDataAccess()
             );
         
-            AuthorService authorService = 
-                new AuthorService(dao);
+            AuthorService authorService =  new AuthorService(dao);
         
             List<Author> authorList = null;
             
             if(action.equalsIgnoreCase(LIST_ACTION)) {
+                // retrieve table
                 authorList = authorService.getAuthorList();
                 request.setAttribute("authorList", authorList);
-            } 
+            } else if(action.equalsIgnoreCase(DELETE_ACTION)) {
+                // action
+                authorService.removeAuthorById(id);
+                // retrieve table
+                authorList = authorService.getAuthorList();
+                request.setAttribute("authorList", authorList);
+            } else if(action.equalsIgnoreCase(ADD_ACTION)) {
+                // action
+                authorService.addAuthor(Arrays.asList(name, DATE));
+                // retrieve table
+                authorList = authorService.getAuthorList();
+                request.setAttribute("authorList", authorList);
+            } else if(action.equalsIgnoreCase(UPDATE_ACTION)) {
+                // action
+                authorService.updateAuthorById(Arrays.asList(name,DATE), Integer.parseInt(id));
+               // authorService.updateAuthorById(Arrays.asList("Jimmer",DATE), 11);
+                // retrieve table
+                authorList = authorService.getAuthorList();
+                request.setAttribute("authorList", authorList);
+            }
             
         } catch(Exception e) {
             destination = "/authorList.jsp";
