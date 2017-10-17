@@ -89,7 +89,7 @@ public class MySqlDataAccess implements DataAccess {
     }
 
     @Override
-    public int updateRecord(String tableName, List<String> colNames, List<Object> colValues, String pkColName, Object pkValue) throws SQLException {
+    public int updateRecord(String tableName, List<String> colNames, List<Object> colValues, String pkColName, Object pkValue) throws SQLException, IllegalArgumentException {
         // validate tablename for NULL or empty values
         if (tableName == null || tableName.length() < 1) {
             throw new IllegalArgumentException("Table Name Invalid");
@@ -136,6 +136,16 @@ public class MySqlDataAccess implements DataAccess {
     public int deleteRecordById(String tableName, String pkColName,
             Object pkValue) throws ClassNotFoundException,
             SQLException {
+        // validate tablename for NULL or empty values
+        if (tableName == null || tableName.length() < 1) {
+            throw new IllegalArgumentException("Table Name Invalid");
+        } // validate the PRIMARY KEY COLUMN for NULL or EMPTY VALUE
+        else if (pkColName == null || pkColName.length() < 1) {
+            throw new IllegalArgumentException("PK Column Name Invalid");
+            // validate the PRIMARY KEY VALUE for NULL 
+        } else if (pkValue == null) {
+            throw new IllegalArgumentException("PK Value Invalid");
+        }
 
         String sql = "DELETE FROM " + tableName + " WHERE "
                 + pkColName + " = ?";
