@@ -1,5 +1,6 @@
 package edu.wctc.distjava.jgl.bookwebapp.model;
 
+import java.lang.reflect.Array;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -33,21 +34,30 @@ public class MySqlDataAccess implements DataAccess {
         conn = DriverManager.getConnection(url, userName, password);
     }
 
+    @Override
     public void closeConnection() throws SQLException {
         if (conn != null) {
             conn.close();
         }
     }
 
-    
-    
-    // VALIDATATION
-    // tablename cant be null
-    // colnmaes must have miniumu size of 1
-    // calvalues must have miniumu size of 1
-    // sizes of ^^ should match
+
+    @Override
     public int createRecord(String tableName, List<String> colNames,
-            List<Object> colValues) throws SQLException {
+            List<Object> colValues) throws SQLException, IllegalArgumentException {
+        // validate tablename for NULL or empty values
+        if (tableName == null || tableName.length() < 1) {
+            throw new IllegalArgumentException("Table Name Invalid");
+            // validate colNames for NULL or empty values
+        } else if (colNames == null || colNames.size() < 1) {
+            throw new IllegalArgumentException("Column Name Invalid");
+            // validate colValues or NULL or empty values
+        } else if (colValues == null || colValues.size() < 1) {
+            throw new IllegalArgumentException("Column Value Data Invalid");
+            // validate the amount of columns and values match
+        } else if (colNames.size() != colValues.size()) {
+            throw new IllegalArgumentException("Invalid Data");
+        }
 
         String sql = "INSERT INTO " + tableName + " ";
         StringJoiner sj = new StringJoiner(", ", "(", ")");
@@ -79,6 +89,7 @@ public class MySqlDataAccess implements DataAccess {
         return pstmt.executeUpdate();
     }
 
+    @Override
     public int updateRecord(String tableName, List<String> colNames, List<Object> colValues, String pkColName, Object pkValue) throws SQLException {
 
         String sql = "UPDATE " + tableName + " SET ";
@@ -166,7 +177,6 @@ public class MySqlDataAccess implements DataAccess {
 
 //        db.createRecord("author", Arrays.asList("author_name", "date_added"),
 //                Arrays.asList("Bob Jones", "2010-02-11"));
-
         db.updateRecord("author", Arrays.asList("author_name", "date_added"), Arrays.asList("Doobie Dooo", "2013-08-05"), "author_id", 4);
         db.closeConnection();
 //
