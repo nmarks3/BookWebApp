@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "AuthorController", urlPatterns = {"/authorController"})
 public class AuthorController extends HttpServlet {
+
     public static final String ACTION = "action";
     public static final String AUTHOR_ID = "id";
     public static final String LIST_ACTION = "list";
@@ -36,8 +37,6 @@ public class AuthorController extends HttpServlet {
     public static final String ADD_ACTION = "add";
     public static final String UPDATE_ACTION = "update";
     public static final String AUTHOR_NAME = "name";
-    
-    
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -51,58 +50,54 @@ public class AuthorController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
+
         String destination = "/authorList.jsp"; // default
-        
+
         try {
             String action = request.getParameter(ACTION);
             String id = request.getParameter(AUTHOR_ID);
             String name = request.getParameter(AUTHOR_NAME);
-            
+            String errorMsg = "";
+
+
             Date date = new Date();
-            String DATE = new SimpleDateFormat("yyyy-MM-dd").format(date);
-            
+
             IAuthorDao dao = new AuthorDao(
-                "com.mysql.jdbc.Driver",
-                "jdbc:mysql://localhost:3306/book",
-                "root", "root",
-                new MySqlDataAccess()
+                    "com.mysql.jdbc.Driver",
+                    "jdbc:mysql://localhost:3306/book",
+                    "root", "root",
+                    new MySqlDataAccess()
             );
-        
-            AuthorService authorService =  new AuthorService(dao);
-        
+
+            AuthorService authorService = new AuthorService(dao);
+
             List<Author> authorList = null;
-            
-            if(action.equalsIgnoreCase(LIST_ACTION)) {
-                // retrieve table
+
+            // Retrives list of authors
+            if (action.equalsIgnoreCase(LIST_ACTION)) {
                 authorList = authorService.getAuthorList();
                 request.setAttribute("authorList", authorList);
-            } else if(action.equalsIgnoreCase(DELETE_ACTION)) {
-                // action
+                // Deletes author 
+            } else if (action.equalsIgnoreCase(DELETE_ACTION)) {
                 authorService.removeAuthorById(id);
-                // retrieve table
                 authorList = authorService.getAuthorList();
                 request.setAttribute("authorList", authorList);
-            } else if(action.equalsIgnoreCase(ADD_ACTION)) {
-                // action
-                authorService.addAuthor(Arrays.asList(name, DATE));
-                // retrieve table
+                // Adds author
+            } else if (action.equalsIgnoreCase(ADD_ACTION)) {
+                authorService.addAuthor(Arrays.asList(name, date));
                 authorList = authorService.getAuthorList();
                 request.setAttribute("authorList", authorList);
-            } else if(action.equalsIgnoreCase(UPDATE_ACTION)) {
-                // action
-                authorService.updateAuthorById(Arrays.asList(name,DATE), Integer.parseInt(id));
-               // authorService.updateAuthorById(Arrays.asList("Jimmer",DATE), 11);
-                // retrieve table
-                authorList = authorService.getAuthorList();
-                request.setAttribute("authorList", authorList);
+                // Updates author
+            } else if (action.equalsIgnoreCase(UPDATE_ACTION)) {
+                destination = "/authorUpdate.jsp";
+                request.setAttribute("id", id);
+                authorService.updateAuthorById(Arrays.asList(name, date), Integer.parseInt(id));            
             }
-            
-        } catch(Exception e) {
+        } catch (Exception e) {
             destination = "/authorList.jsp";
             request.setAttribute("errMessage", e.getMessage());
         }
-        
+
         RequestDispatcher view
                 = request.getRequestDispatcher(destination);
         view.forward(request, response);
@@ -110,10 +105,8 @@ public class AuthorController extends HttpServlet {
     }
 
     // use if statements for actionresults ex edit? or delete?
-    
     // url AuthorController?action=create&authorName=Bob%20Smith
     // date added is a new date();
-    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

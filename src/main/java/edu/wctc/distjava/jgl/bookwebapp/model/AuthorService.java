@@ -38,7 +38,7 @@ public class AuthorService {
     public int updateAuthorById(List <Object> colValues, int id) throws SQLException, ClassNotFoundException{   
         return authorDao.updateAuthor(colValues, id);
     }
-
+    
     public List<Author> getAuthorList()
             throws SQLException, ClassNotFoundException {
 
