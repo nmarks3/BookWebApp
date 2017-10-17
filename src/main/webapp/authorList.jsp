@@ -14,6 +14,8 @@
 <html>
     <head>
           <link rel="stylesheet" href="css/bootstrap.min.css" >
+          <link rel="stylesheet" href="css/custom.css" >
+          <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
         <title>Author List</title>
     </head>
     <body>

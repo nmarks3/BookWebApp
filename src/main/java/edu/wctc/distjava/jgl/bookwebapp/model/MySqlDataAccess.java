@@ -26,38 +26,29 @@ public class MySqlDataAccess implements DataAccess {
     private PreparedStatement pstmt;
     private ResultSet rs;
 
-    public void openConnection(String driverClass,
-            String url, String userName, String password)
-            throws ClassNotFoundException, SQLException {
-
+    public final void openConnection(String driverClass,
+            String url, String userName, String password) throws ClassNotFoundException, SQLException {
+        AuthorValidation.valConnection(driverClass, url, userName, password);
         Class.forName(driverClass);
         conn = DriverManager.getConnection(url, userName, password);
     }
 
     @Override
-    public void closeConnection() throws SQLException {
+    public final void closeConnection() throws SQLException {
         if (conn != null) {
             conn.close();
         }
     }
 
     @Override
-    public int createRecord(String tableName, List<String> colNames,
-            List<Object> colValues) throws SQLException, IllegalArgumentException {
-        // validate tablename for NULL or empty values
-        if (tableName == null || tableName.length() < 1) {
-            throw new IllegalArgumentException("Table Name Invalid");
-            // validate colNames for NULL or empty values
-        } else if (colNames == null || colNames.size() < 1) {
-            throw new IllegalArgumentException("Column Name Invalid");
-            // validate colValues or NULL or empty values
-        } else if (colValues == null || colValues.size() < 1) {
-            throw new IllegalArgumentException("Column Value Data Invalid");
-            // validate the amount of columns and values match
-        } else if (colNames.size() != colValues.size()) {
-            throw new IllegalArgumentException("Invalid Data");
-        }
+    public final int createRecord(String tableName, List<String> colNames,
+            List<Object> colValues) throws SQLException  {
 
+        AuthorValidation.valTableName(tableName);
+        AuthorValidation.valColNames(colNames);
+        AuthorValidation.valColValues(colValues);
+        AuthorValidation.valColMatch(colNames, colValues);
+        
         String sql = "INSERT INTO " + tableName + " ";
         StringJoiner sj = new StringJoiner(", ", "(", ")");
         for (String col : colNames) {
@@ -89,26 +80,14 @@ public class MySqlDataAccess implements DataAccess {
     }
 
     @Override
-    public int updateRecord(String tableName, List<String> colNames, List<Object> colValues, String pkColName, Object pkValue) throws SQLException, IllegalArgumentException {
-        // validate tablename for NULL or empty values
-        if (tableName == null || tableName.length() < 1) {
-            throw new IllegalArgumentException("Table Name Invalid");
-            // validate colNames for NULL or empty values
-        } else if (colNames == null || colNames.size() < 1) {
-            throw new IllegalArgumentException("Column Name Invalid");
-            // validate colValues or NULL or empty values
-        } else if (colValues == null || colValues.size() < 1) {
-            throw new IllegalArgumentException("Column Value Data Invalid");
-            // validate the amount of columns and values match
-        } else if (colNames.size() != colValues.size()) {
-            throw new IllegalArgumentException("Invalid Data");
-            // validate the PRIMARY KEY COLUMN for NULL or EMPTY VALUE
-        } else if (pkColName == null || pkColName.length() < 1) {
-            throw new IllegalArgumentException("PK Column Name Invalid");
-            // validate the PRIMARY KEY VALUE for NULL 
-        } else if (pkValue == null) {
-            throw new IllegalArgumentException("PK Value Invalid");
-        }
+    public final int updateRecord(String tableName, List<String> colNames, List<Object> colValues, String pkColName, Object pkValue) throws SQLException, IllegalArgumentException {
+        AuthorValidation.valTableName(tableName);
+        AuthorValidation.valColNames(colNames);
+        AuthorValidation.valColValues(colValues);
+        AuthorValidation.valColMatch(colNames, colValues);
+        AuthorValidation.valPkColName(pkColName);
+        AuthorValidation.valPkValue(pkValue);
+        
         String sql = "UPDATE " + tableName + " SET ";
 
         for (int i = 0; i < colNames.size(); i++) {
@@ -133,19 +112,11 @@ public class MySqlDataAccess implements DataAccess {
     }
 
     @Override
-    public int deleteRecordById(String tableName, String pkColName,
-            Object pkValue) throws ClassNotFoundException,
-            SQLException {
-        // validate tablename for NULL or empty values
-        if (tableName == null || tableName.length() < 1) {
-            throw new IllegalArgumentException("Table Name Invalid");
-        } // validate the PRIMARY KEY COLUMN for NULL or EMPTY VALUE
-        else if (pkColName == null || pkColName.length() < 1) {
-            throw new IllegalArgumentException("PK Column Name Invalid");
-            // validate the PRIMARY KEY VALUE for NULL 
-        } else if (pkValue == null) {
-            throw new IllegalArgumentException("PK Value Invalid");
-        }
+    public final int deleteRecordById(String tableName, String pkColName,
+            Object pkValue) throws ClassNotFoundException, SQLException {
+        AuthorValidation.valTableName(tableName);
+        AuthorValidation.valPkColName(pkColName);
+        AuthorValidation.valPkValue(pkValue);
 
         String sql = "DELETE FROM " + tableName + " WHERE "
                 + pkColName + " = ?";
@@ -163,12 +134,16 @@ public class MySqlDataAccess implements DataAccess {
      * @param maxRecords
      * @return
      * @throws SQLException
+     * @throws java.lang.ClassNotFoundException
      */
-    public List<Map<String, Object>> getAllRecords(String tableName, int maxRecords)
+    @Override
+    public final List<Map<String, Object>> getAllRecords(String tableName, int maxRecords)
             throws SQLException, ClassNotFoundException {
+        AuthorValidation.valTableName(tableName);
+        AuthorValidation.valMaxRecords(maxRecords);
 
         List<Map<String, Object>> rawData = new Vector<>();
-        String sql = "";
+        String sql;
 
         if (maxRecords > ALL_RECORDS) {
             sql = "select * from " + tableName + " limit " + maxRecords;
@@ -193,7 +168,11 @@ public class MySqlDataAccess implements DataAccess {
 
         return rawData;
     }
-
+    
+    
+//////////////////////////////////
+ //   notes & misc
+ /////////////////////////////////
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
 
         DataAccess db = new MySqlDataAccess();

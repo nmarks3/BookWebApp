@@ -14,36 +14,38 @@
 <html>
     <head>
         <link rel="stylesheet" href="css/bootstrap.min.css" >
+        <link rel="stylesheet" href="css/custom.css" >
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Author Update</title>
     </head>
     <body>
-         <div class="container">
+        <div class="container">
             <div class="row">
                 <div class="col">
-        <h1>Author Update</h1>
+                    <h1>Author Update</h1>
 
-        <form name="update" method ="POST" action = "authorController?action=update">
+                    <form name="update" method ="POST" action = "authorController?action=update">
 
-            <input  type="hidden" name="id" value="${id}">            
-            Author Name:
-            <br>
-            <input class="form-control" type="text" name="name" value="">
-            <br>           
-            <input type="submit" class="btn btn-primary" name="submit" value="Submit">
-            <br><br>
-           
-        </form>
+                        <input  type="hidden" name="id" value="${id}">            
+                        Author Name:
+                        <br>
+                        <input class="form-control" type="text" name="name" value="">
+                        <br>           
+                        <input type="submit" class="btn btn-primary" name="submit" value="Submit">
+                        <br><br>
 
-    </form>
-    
-    <form name="home" method="POST" action="authorController?action=list" > 
-        <input class="btn btn-primary"   type="submit" value="Back to Authors List" />
-    </form>
+                    </form>
+
+                    </form>
+
+                    <form name="home" method="POST" action="authorController?action=list" > 
+                        <input class="btn btn-primary"   type="submit" value="Back to Authors List" />
+                    </form>
+                </div>
             </div>
-         </div>
-         </div>
-</body>
+        </div>
+    </body>
 
 
 </html>

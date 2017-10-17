@@ -14,21 +14,23 @@
 <html>
     <head>
         <link rel="stylesheet" href="css/bootstrap.min.css" >
+        <link rel="stylesheet" href="css/custom.css" >
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Author Add</title>
     </head>
     <body>
-         <div class="container">
+        <div class="container">
             <div class="row">
                 <div class="col">
-        <h1>Author Add</h1>
-        
-        <form id=”addAuthorForm” name=”addAuthorForm” method="POST" action=authorController?action=add >
-            <p>Name: &nbsp;<input class="form-control" type="text" name="name" id="authorName" value="" placeholder="Enter Author "></p>
-            <input type="submit" class="btn btn-primary" id="submit" name="submit" value="Add Author">
-        </form>
+                    <h1>Author Add</h1>
+
+                    <form id=”addAuthorForm” name=”addAuthorForm” method="POST" action=authorController?action=add >
+                        <p>Name: &nbsp;<input class="form-control" type="text" name="name" id="authorName" value="" placeholder="Enter Author "></p>
+                        <input type="submit" class="btn btn-primary" id="submit" name="submit" value="Add Author">
+                    </form>
+                </div>
             </div>
-            </div>
-         </div>
+        </div>
     </body>
 </html>
