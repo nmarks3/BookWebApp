@@ -41,7 +41,6 @@ public class MySqlDataAccess implements DataAccess {
         }
     }
 
-
     @Override
     public int createRecord(String tableName, List<String> colNames,
             List<Object> colValues) throws SQLException, IllegalArgumentException {
@@ -91,7 +90,25 @@ public class MySqlDataAccess implements DataAccess {
 
     @Override
     public int updateRecord(String tableName, List<String> colNames, List<Object> colValues, String pkColName, Object pkValue) throws SQLException {
-
+        // validate tablename for NULL or empty values
+        if (tableName == null || tableName.length() < 1) {
+            throw new IllegalArgumentException("Table Name Invalid");
+            // validate colNames for NULL or empty values
+        } else if (colNames == null || colNames.size() < 1) {
+            throw new IllegalArgumentException("Column Name Invalid");
+            // validate colValues or NULL or empty values
+        } else if (colValues == null || colValues.size() < 1) {
+            throw new IllegalArgumentException("Column Value Data Invalid");
+            // validate the amount of columns and values match
+        } else if (colNames.size() != colValues.size()) {
+            throw new IllegalArgumentException("Invalid Data");
+            // validate the PRIMARY KEY COLUMN for NULL or EMPTY VALUE
+        } else if (pkColName == null || pkColName.length() < 1) {
+            throw new IllegalArgumentException("PK Column Name Invalid");
+            // validate the PRIMARY KEY VALUE for NULL 
+        } else if (pkValue == null) {
+            throw new IllegalArgumentException("PK Value Invalid");
+        }
         String sql = "UPDATE " + tableName + " SET ";
 
         for (int i = 0; i < colNames.size(); i++) {
