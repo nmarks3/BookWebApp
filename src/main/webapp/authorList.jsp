@@ -1,7 +1,6 @@
 <%-- 
     Document   : authorList
-    Created on : Sep 19, 2017, 8:35:54 PM
-    Author     : jlombardo
+    Author     : nmarks
 --%>
 
 <%@page import="java.util.List"%>
@@ -28,7 +27,7 @@
                         <tr>
                             <th>ID</th>
                             <th>Author Name</th>
-                            <th>Date Added</th>
+                            <th>Date</th>
                             <th></th>
                             <th></th>
                         </tr>
@@ -39,7 +38,7 @@
                                 <td>${a.authorId}</td>
                                 <td>${a.authorName}</td>
                                 <td><fmt:formatDate pattern = "yyyy-MM-dd" value = "${a.dateAdded}" /></td>
-                                <td><a href="authorController?action=update&id=${a.authorId}"><button type="button" class="btn btn-primary">Update</button></td>
+                                <td><a href="authorController?action=update&id=${a.authorId}&name=${a.authorName}"><button type="button" class="btn btn-primary">Update</button></td>
                                 <td><a href="authorController?action=delete&id=${a.authorId}"><button type="button" class="btn btn-danger">Delete</button></a></td>
                             </tr>
 
