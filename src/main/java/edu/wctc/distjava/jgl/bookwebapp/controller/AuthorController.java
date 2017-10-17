@@ -91,6 +91,7 @@ public class AuthorController extends HttpServlet {
             } else if (action.equalsIgnoreCase(UPDATE_ACTION)) {
                 destination = "/authorUpdate.jsp";
                 request.setAttribute("id", id);
+                request.setAttribute("authorName", name);
                 authorService.updateAuthorById(Arrays.asList(name, date), Integer.parseInt(id));            
             }
         } catch (Exception e) {
