@@ -18,7 +18,7 @@
         <title>Author List</title>
     </head>
     <body>
-
+<jsp:include page="jsp/navbar.jsp"/>
         <div class="container">
             <div class="row">
                 <h1>Author List</h1>

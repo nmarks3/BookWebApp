@@ -1,7 +1,6 @@
 <%-- 
     Document   : authorList
-    Created on : Sep 19, 2017, 8:35:54 PM
-    Author     : jlombardo
+    Author     : nmarks
 --%>
 
 <%@page import="java.util.List"%>
@@ -17,28 +16,25 @@
         <link rel="stylesheet" href="css/custom.css" >
         <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="http://www.parsecdn.com/js/parse-1.2.2.min.js"></script>
         <title>Author Update</title>
     </head>
     <body>
+        <jsp:include page="jsp/navbar.jsp"/>
         <div class="container">
             <div class="row">
                 <div class="col">
                     <h1>Author Update</h1>
-
                     <form name="update" method ="POST" action = "authorController?action=update">
-
                         <input  type="hidden" name="id" value="${id}">            
                         Author Name:
                         <br>
-                        <input class="form-control" type="text" name="name" value="">
+                        <input class="form-control" type="text" name="name" value="${authorName}">
                         <br>           
-                        <input type="submit" class="btn btn-primary" name="submit" value="Submit">
+                        <input type="submit" class="btn btn-primary" name="submit" value="Submit" onSubmit="alert('Thanks');">
                         <br><br>
-
                     </form>
-
-                    </form>
-
                     <form name="home" method="POST" action="authorController?action=list" > 
                         <input class="btn btn-primary"   type="submit" value="Back to Authors List" />
                     </form>

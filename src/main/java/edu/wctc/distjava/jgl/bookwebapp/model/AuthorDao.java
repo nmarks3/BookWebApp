@@ -1,19 +1,13 @@
 package edu.wctc.distjava.jgl.bookwebapp.model;
 
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Vector;
 
-/**
- *
- * @author jlombardo
- */
-public class AuthorDao implements IAuthorDao {
+public final class AuthorDao implements IAuthorDao {
     Date date = new Date();
     
     private String driverClass;
@@ -26,28 +20,31 @@ public class AuthorDao implements IAuthorDao {
     private final String AUTHOR_NAME = "author_name";
     private final String DATE_ADDED = "date_added";
 
+    // database connection information
     public AuthorDao(String driverClass, String url, String userName, String password, DataAccess db) {
-        
+        AuthorValidation.valConnection(driverClass, url, userName, password);
         setDriverClass(driverClass);
         setUrl(url);
         setUserName(userName);
         setPassword(password);
         setDb(db);
     }
-    ///homework 
+    
+    // adds author to database
+    @Override
     public final int addAuthor(List<Object> colValues) throws ClassNotFoundException, SQLException {
          db.openConnection(driverClass, url, userName, password);
-         String tableName = "author";
+         AuthorValidation.valColValues(colValues);
          int authorsAdded = db.createRecord(AUTHOR_TBL,Arrays.asList(AUTHOR_NAME, DATE_ADDED), colValues);
          db.closeConnection();
          
          return authorsAdded;
     }
     
+    // retrives author by the author ID
+    @Override
     public final int removeAuthorById(Integer id) throws ClassNotFoundException, SQLException {
-        if(id == null || id < 1) {
-            throw new IllegalArgumentException("id must be a Integer greater than 0");
-        }
+        AuthorValidation.valID(id);
         
         db.openConnection(driverClass, url, userName, password);
         
@@ -58,7 +55,11 @@ public class AuthorDao implements IAuthorDao {
         return recsDeleted;
     }
     
+    // updates an author by the value of the primary key (ID)
+    @Override
     public final int updateAuthor(List<Object> colValue, Object pkValue ) throws SQLException, ClassNotFoundException{
+        AuthorValidation.valColValues(colValue);
+        AuthorValidation.valPkValue(pkValue);
         db.openConnection(driverClass, url, userName, password);
         int recsUpdated = db.updateRecord(AUTHOR_TBL, Arrays.asList(AUTHOR_NAME, DATE_ADDED), colValue, AUTHOR_PK, pkValue);
         db.closeConnection();
@@ -66,6 +67,7 @@ public class AuthorDao implements IAuthorDao {
     }
     
     
+    // retrieves a list of the authors
     @Override
     public final List<Author> getListOfAuthors() 
             throws SQLException, ClassNotFoundException {
@@ -101,48 +103,64 @@ public class AuthorDao implements IAuthorDao {
         
         return list;
     }
-
+    
+    // retrives the dataAccess variable
     public DataAccess getDb() {
         return db;
     }
 
-    public void setDb(DataAccess db) {
+    // sets the dataAccess variable
+    public final void setDb(DataAccess db) {
         this.db = db;
     }
-    
-    
-
-    public String getDriverClass() {
+   
+    // retrieves the DB Driver
+    public final String getDriverClass() {
         return driverClass;
     }
 
-    public void setDriverClass(String driverClass) {
+    // sets the DB Driver
+    public final void setDriverClass(String driverClass) {
         this.driverClass = driverClass;
     }
 
-    public String getUrl() {
+    // retrieves the DB URL
+    public final String getUrl() {
         return url;
     }
 
-    public void setUrl(String url) {
+    // sets the DB URL
+    public final void setUrl(String url) {
         this.url = url;
     }
 
-    public String getUserName() {
+    // retrieves the DB User Name
+    public final String getUserName() {
         return userName;
     }
 
-    public void setUserName(String userName) {
+    // sets the DB User Name
+    public final void setUserName(String userName) {
         this.userName = userName;
     }
 
-    public String getPassword() {
+    // retrieves the DB Password
+    public final String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
+    // sets the DB Password
+    public final void setPassword(String password) {
         this.password = password;
     }
+    
+    
+    
+    ////////////////////////////////
+    ////////// notes and misc
+    ////////////////////////////////
+    
+    
     
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
         IAuthorDao dao = new AuthorDao(

@@ -79,4 +79,11 @@ public class AuthorValidation {
             throw new IllegalArgumentException("Invalid Max Records Value");
         }
     }
+    
+    // validate the ID for NULL or less than zero
+    public static final void valID(Object id) throws IllegalArgumentException {
+        if (id == null) {
+            throw new IllegalArgumentException("ID must be a Integer greater than 0");
+        }
+    }
 }

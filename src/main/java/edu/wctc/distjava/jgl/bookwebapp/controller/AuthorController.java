@@ -11,8 +11,6 @@ import edu.wctc.distjava.jgl.bookwebapp.model.AuthorService;
 import edu.wctc.distjava.jgl.bookwebapp.model.IAuthorDao;
 import edu.wctc.distjava.jgl.bookwebapp.model.MySqlDataAccess;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -28,7 +26,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author jlombardo
  */
 @WebServlet(name = "AuthorController", urlPatterns = {"/authorController"})
-public class AuthorController extends HttpServlet {
+public final class AuthorController extends HttpServlet {
 
     public static final String ACTION = "action";
     public static final String AUTHOR_ID = "id";
@@ -38,16 +36,13 @@ public class AuthorController extends HttpServlet {
     public static final String UPDATE_ACTION = "update";
     public static final String AUTHOR_NAME = "name";
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    private String driverClass;
+    private String url;
+    private String userName;
+    private String password;
+
+    // method that requests the database data and executes the user inputs to the database 
+    protected final void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 
@@ -57,19 +52,11 @@ public class AuthorController extends HttpServlet {
             String action = request.getParameter(ACTION);
             String id = request.getParameter(AUTHOR_ID);
             String name = request.getParameter(AUTHOR_NAME);
-            String errorMsg = "";
-
-
             Date date = new Date();
 
-            IAuthorDao dao = new AuthorDao(
-                    "com.mysql.jdbc.Driver",
-                    "jdbc:mysql://localhost:3306/book",
-                    "root", "root",
-                    new MySqlDataAccess()
-            );
-
-            AuthorService authorService = new AuthorService(dao);
+            // pass database connection information to data access object
+            AuthorService authorService = new AuthorService(
+                    new AuthorDao(driverClass, url, userName, password, new MySqlDataAccess()));
 
             List<Author> authorList = null;
 
@@ -92,22 +79,29 @@ public class AuthorController extends HttpServlet {
                 destination = "/authorUpdate.jsp";
                 request.setAttribute("id", id);
                 request.setAttribute("authorName", name);
-                authorService.updateAuthorById(Arrays.asList(name, date), Integer.parseInt(id));            
+                authorService.updateAuthorById(Arrays.asList(name, date), Integer.parseInt(id));
             }
         } catch (Exception e) {
             destination = "/authorList.jsp";
             request.setAttribute("errMessage", e.getMessage());
         }
-
         RequestDispatcher view
                 = request.getRequestDispatcher(destination);
         view.forward(request, response);
-
     }
 
-    // use if statements for actionresults ex edit? or delete?
-    // url AuthorController?action=create&authorName=Bob%20Smith
-    // date added is a new date();
+    @Override
+    public void init() throws ServletException {
+        driverClass = getServletContext()
+                .getInitParameter("db.driver.class");
+        url = getServletContext()
+                .getInitParameter("db.url");
+        userName = getServletContext()
+                .getInitParameter("db.username");
+        password = getServletContext()
+                .getInitParameter("db.password");
+    }
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

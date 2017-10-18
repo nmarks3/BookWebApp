@@ -1,6 +1,5 @@
 package edu.wctc.distjava.jgl.bookwebapp.model;
 
-import java.lang.reflect.Array;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -8,7 +7,6 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -16,7 +14,7 @@ import java.util.Map;
 import java.util.StringJoiner;
 import java.util.Vector;
 
-public class MySqlDataAccess implements DataAccess {
+public final class MySqlDataAccess implements DataAccess {
 
     private final int ALL_RECORDS = 0;
     private final boolean DEBUG = true;
@@ -26,6 +24,9 @@ public class MySqlDataAccess implements DataAccess {
     private PreparedStatement pstmt;
     private ResultSet rs;
 
+    // IMPORTANT!! MUST BE DONE FIRST
+    // Opens the connection to the database
+    @Override
     public final void openConnection(String driverClass,
             String url, String userName, String password) throws ClassNotFoundException, SQLException {
         AuthorValidation.valConnection(driverClass, url, userName, password);
@@ -33,6 +34,8 @@ public class MySqlDataAccess implements DataAccess {
         conn = DriverManager.getConnection(url, userName, password);
     }
 
+    // IMPORTANT!! MUST ALWAYS BE DONE (Last?)
+    // Closes the connection to the database
     @Override
     public final void closeConnection() throws SQLException {
         if (conn != null) {
@@ -40,6 +43,7 @@ public class MySqlDataAccess implements DataAccess {
         }
     }
 
+    // Creates a record
     @Override
     public final int createRecord(String tableName, List<String> colNames,
             List<Object> colValues) throws SQLException  {
@@ -79,6 +83,7 @@ public class MySqlDataAccess implements DataAccess {
         return pstmt.executeUpdate();
     }
 
+    // updates a record
     @Override
     public final int updateRecord(String tableName, List<String> colNames, List<Object> colValues, String pkColName, Object pkValue) throws SQLException, IllegalArgumentException {
         AuthorValidation.valTableName(tableName);
@@ -111,6 +116,7 @@ public class MySqlDataAccess implements DataAccess {
         return pstmt.executeUpdate();
     }
 
+    // deletes a record based on its ID
     @Override
     public final int deleteRecordById(String tableName, String pkColName,
             Object pkValue) throws ClassNotFoundException, SQLException {
@@ -127,15 +133,7 @@ public class MySqlDataAccess implements DataAccess {
 
     }
 
-    /**
-     * Returns records from a table. Requires and open connection.
-     *
-     * @param tableName
-     * @param maxRecords
-     * @return
-     * @throws SQLException
-     * @throws java.lang.ClassNotFoundException
-     */
+    // Retrieves ALL records
     @Override
     public final List<Map<String, Object>> getAllRecords(String tableName, int maxRecords)
             throws SQLException, ClassNotFoundException {

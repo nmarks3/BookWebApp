@@ -1,7 +1,6 @@
 <%-- 
     Document   : authorList
-    Created on : Sep 19, 2017, 8:35:54 PM
-    Author     : jlombardo
+    Author     : nmarks
 --%>
 
 <%@page import="java.util.List"%>
@@ -20,14 +19,18 @@
         <title>Author Add</title>
     </head>
     <body>
+        <jsp:include page="jsp/navbar.jsp"/>
         <div class="container">
             <div class="row">
                 <div class="col">
                     <h1>Author Add</h1>
-
                     <form id=”addAuthorForm” name=”addAuthorForm” method="POST" action=authorController?action=add >
                         <p>Name: &nbsp;<input class="form-control" type="text" name="name" id="authorName" value="" placeholder="Enter Author "></p>
                         <input type="submit" class="btn btn-primary" id="submit" name="submit" value="Add Author">
+                    </form>
+                    <br>
+                    <form name="home" method="POST" action="authorController?action=list" > 
+                        <input class="btn btn-primary"   type="submit" value="Cancel" />
                     </form>
                 </div>
             </div>
