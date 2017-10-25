@@ -16,13 +16,6 @@ public interface DataAccess {
 public int updateRecord(String tableName, List<String> colNames, List<Object> colValues, String pkColName, Object pkValue) throws SQLException;    
     void closeConnection() throws SQLException;
 
-    /**
-     * Returns records from a table. Requires and open connection.
-     * @param tableName
-     * @param maxRecords
-     * @return
-     * @throws SQLException
-     */
     
     public int deleteRecordById(String tableName, String pkColName, 
             Object pkValue) throws ClassNotFoundException, 

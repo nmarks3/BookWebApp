@@ -179,8 +179,8 @@ public final class MySqlDataAccess implements DataAccess {
                 "jdbc:mysql://localhost:3306/book",
                 "root", "root");
 
-//        db.createRecord("author", Arrays.asList("author_name", "date_added"),
-//                Arrays.asList("Bob Jones", "2010-02-11"));
+        db.createRecord("author", Arrays.asList("author_name", "date_added"),
+             Arrays.asList("Bob Jones", "2010-02-11"));
         db.updateRecord("author", Arrays.asList("author_name", "date_added"), Arrays.asList("Doobie Dooo", "2013-08-05"), "author_id", 4);
         db.closeConnection();
 //

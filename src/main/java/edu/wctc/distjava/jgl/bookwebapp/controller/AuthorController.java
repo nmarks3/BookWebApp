@@ -8,7 +8,6 @@ package edu.wctc.distjava.jgl.bookwebapp.controller;
 import edu.wctc.distjava.jgl.bookwebapp.model.Author;
 import edu.wctc.distjava.jgl.bookwebapp.model.AuthorDao;
 import edu.wctc.distjava.jgl.bookwebapp.model.AuthorService;
-import edu.wctc.distjava.jgl.bookwebapp.model.IAuthorDao;
 import edu.wctc.distjava.jgl.bookwebapp.model.MySqlDataAccess;
 import java.io.IOException;
 import java.util.Arrays;
