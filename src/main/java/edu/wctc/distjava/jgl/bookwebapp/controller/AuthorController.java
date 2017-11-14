@@ -1,18 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+///*
+// * To change this license header, choose License Headers in Project Properties.
+// * To change this template file, choose Tools | Templates
+// * and open the template in the editor.
+// */
 package edu.wctc.distjava.jgl.bookwebapp.controller;
-
+//
 import edu.wctc.distjava.jgl.bookwebapp.model.Author;
-import edu.wctc.distjava.jgl.bookwebapp.model.AuthorDao;
 import edu.wctc.distjava.jgl.bookwebapp.model.AuthorService;
-import edu.wctc.distjava.jgl.bookwebapp.model.MySqlDataAccess;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,13 +19,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author jlombardo
- */
 @WebServlet(name = "AuthorController", urlPatterns = {"/authorController"})
 public final class AuthorController extends HttpServlet {
-
+    
+    @EJB
+    private AuthorService authorService;
+    
     public static final String ACTION = "action";
     public static final String AUTHOR_ID = "id";
     public static final String LIST_ACTION = "list";
@@ -34,13 +32,13 @@ public final class AuthorController extends HttpServlet {
     public static final String ADD_ACTION = "add";
     public static final String UPDATE_ACTION = "update";
     public static final String AUTHOR_NAME = "name";
-
-    private String driverClass;
-    private String url;
-    private String userName;
-    private String password;
-
-    // method that requests the database data and executes the user inputs to the database 
+//
+////    private String driverClass;
+////    private String url;
+////    private String userName;
+////    private String password;
+////
+////    // method that requests the database data and executes the user inputs to the database 
     protected final void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -51,34 +49,21 @@ public final class AuthorController extends HttpServlet {
             String action = request.getParameter(ACTION);
             String id = request.getParameter(AUTHOR_ID);
             String name = request.getParameter(AUTHOR_NAME);
-            Date date = new Date();
-
-            // pass database connection information to data access object
-            AuthorService authorService = new AuthorService(
-                    new AuthorDao(driverClass, url, userName, password, new MySqlDataAccess()));
-
             List<Author> authorList = null;
 
             // Retrives list of authors
             if (action.equalsIgnoreCase(LIST_ACTION)) {
                 authorList = authorService.getAuthorList();
                 request.setAttribute("authorList", authorList);
-                // Deletes author 
-            } else if (action.equalsIgnoreCase(DELETE_ACTION)) {
-                authorService.removeAuthorById(id);
-                authorList = authorService.getAuthorList();
-                request.setAttribute("authorList", authorList);
-                // Adds author
-            } else if (action.equalsIgnoreCase(ADD_ACTION)) {
-                authorService.addAuthor(Arrays.asList(name, date));
-                authorList = authorService.getAuthorList();
-                request.setAttribute("authorList", authorList);
-                // Updates author
-            } else if (action.equalsIgnoreCase(UPDATE_ACTION)) {
+            } else if(action.equalsIgnoreCase(ADD_ACTION)) {
+                authorService.createAuthor(name);
+            } else if(action.equalsIgnoreCase(DELETE_ACTION)) {
+                authorService.deleteAuthorById(id);
+            } else if(action.equalsIgnoreCase(UPDATE_ACTION)) {
                 destination = "/authorUpdate.jsp";
                 request.setAttribute("id", id);
                 request.setAttribute("authorName", name);
-                authorService.updateAuthorById(Arrays.asList(name, date), Integer.parseInt(id));
+                authorService.updateAuthorById(id, name);
             }
         } catch (Exception e) {
             destination = "/authorList.jsp";
@@ -91,17 +76,10 @@ public final class AuthorController extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        driverClass = getServletContext()
-                .getInitParameter("db.driver.class");
-        url = getServletContext()
-                .getInitParameter("db.url");
-        userName = getServletContext()
-                .getInitParameter("db.username");
-        password = getServletContext()
-                .getInitParameter("db.password");
+
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+//     <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
