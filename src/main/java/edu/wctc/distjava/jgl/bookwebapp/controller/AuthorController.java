@@ -6,10 +6,8 @@
 package edu.wctc.distjava.jgl.bookwebapp.controller;
 //
 import edu.wctc.distjava.jgl.bookwebapp.model.Author;
-import edu.wctc.distjava.jgl.bookwebapp.model.AuthorService;
+import edu.wctc.distjava.jgl.bookwebapp.model.AuthorFacade;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
@@ -23,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 public final class AuthorController extends HttpServlet {
     
     @EJB
-    private AuthorService authorService;
+    private AuthorFacade authorService;
     
     public static final String ACTION = "action";
     public static final String AUTHOR_ID = "id";
@@ -48,15 +46,15 @@ public final class AuthorController extends HttpServlet {
 
             // Retrives list of authors
             if (action.equalsIgnoreCase(LIST_ACTION)) {
-                authorList = authorService.getAuthorList();
+                authorList = authorService.findAll();
                 request.setAttribute("authorList", authorList);
             } else if(action.equalsIgnoreCase(ADD_ACTION)) {
                 authorService.createAuthor(name);
-                authorList = authorService.getAuthorList();
+                authorList = authorService.findAll();
                 request.setAttribute("authorList", authorList);
             } else if(action.equalsIgnoreCase(DELETE_ACTION)) {
                 authorService.deleteAuthorById(id);
-                authorList = authorService.getAuthorList();
+                authorList = authorService.findAll();
                 request.setAttribute("authorList", authorList);
             } else if(action.equalsIgnoreCase(UPDATE_ACTION)) {
                 destination = "/authorUpdate.jsp";
