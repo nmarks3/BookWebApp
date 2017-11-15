@@ -32,12 +32,7 @@ public final class AuthorController extends HttpServlet {
     public static final String ADD_ACTION = "add";
     public static final String UPDATE_ACTION = "update";
     public static final String AUTHOR_NAME = "name";
-//
-////    private String driverClass;
-////    private String url;
-////    private String userName;
-////    private String password;
-////
+    
 ////    // method that requests the database data and executes the user inputs to the database 
     protected final void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -57,8 +52,12 @@ public final class AuthorController extends HttpServlet {
                 request.setAttribute("authorList", authorList);
             } else if(action.equalsIgnoreCase(ADD_ACTION)) {
                 authorService.createAuthor(name);
+                authorList = authorService.getAuthorList();
+                request.setAttribute("authorList", authorList);
             } else if(action.equalsIgnoreCase(DELETE_ACTION)) {
                 authorService.deleteAuthorById(id);
+                authorList = authorService.getAuthorList();
+                request.setAttribute("authorList", authorList);
             } else if(action.equalsIgnoreCase(UPDATE_ACTION)) {
                 destination = "/authorUpdate.jsp";
                 request.setAttribute("id", id);
