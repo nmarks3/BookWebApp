@@ -22,35 +22,34 @@
 <jsp:include page="jsp/navbar.jsp"/>
         <div class="container">
             <div class="row">
-                <h1>Author List</h1>
+                <h1>book List</h1>
+
                 <table class="table table-hover table-condensed table-striped">
                     <thead class="thead-inverse">
                         <tr>
                             <th>ID</th>
-                            <th>Author Name</th>
-                            <th>Date</th>
+                            <th>Book Name</th>
+                            <th>ISBN</th>
                             <th></th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach var="a" items="${authorList}">
+                        <c:forEach var="b" items="${bookList}">
                             <tr>
-                                <td>${a.authorId}</td>
-                                <td>${a.authorName}</td>
-                                <td><fmt:formatDate pattern = "yyyy-MM-dd" value = "${a.dateAdded}" /></td>
-                                <td><a href="authorController?action=update&id=${a.authorId}&name=${a.authorName}"><button type="button" class="btn btn-primary">Update</button></td>
-                                <td><a href="authorController?action=delete&id=${a.authorId}"><button type="button" class="btn btn-danger">Delete</button></a></td>
+                                <td>${b.bookId}</td>
+                                <td>${b.title}</td>
+                                <td>${b.isbn}</td>
+                                <td><a href="bookController?action=update&bookId=${b.bookId}&title=${b.title}&isbn=${b.isbn}&authorId=${b.authorId}"><button type="button" class="btn btn-primary">Update</button></td>
+                                <td><a href="bookController?action=delete&bookId=${b.bookId}"><button type="button" class="btn btn-danger">Delete</button></a></td>
                             </tr>
 
                         </c:forEach>
                     </tbody>
                 </table>
-
                 <h3>${errorMsg}</h3>
 
-                <a href="authorAdd.jsp"><button type="button" class="btn btn-primary">Add Author</button></a>
-
+                <a href="bookAdd.jsp"><button type="button" class="btn btn-primary">Add Book</button></a>
             </div>
         </div>
     </body>

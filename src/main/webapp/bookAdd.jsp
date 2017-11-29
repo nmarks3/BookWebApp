@@ -21,16 +21,18 @@
     </head>
     <body>
         <jsp:include page="jsp/navbar.jsp"/>
-        <div class="container" name="addAuthor">
+        <div class="container" name="addBook">
             <div class="row">
                 <div class="col">
-                    <h1>Author Add</h1>
-                    <form id=”addAuthorForm” name=”addAuthorForm” method="POST" action=authorController?action=add >
-                        <p>Name: &nbsp;<input class="form-control" type="text" name="name" id="authorName" value="" placeholder="Enter Author "></p>
-                        <input type="submit" class="btn btn-primary" id="submit" name="submit" value="Add Author">
+                    <h1>Book Add</h1>
+                    <form id=”addBookForm” name=”addBookForm” method="POST" action=bookController?action=add >
+                        <p>Title: &nbsp;<input class="form-control" type="text" name="title" id="bookTitle" value="" placeholder="Enter Title "></p>
+                        <p>Isbn: &nbsp;<input class="form-control" type="text" name="isbn" id="bookIsbn" value="" placeholder="Enter Isbn "></p>
+                        <p>AID &nbsp;<input class="form-control" type="text" name="authorId" id="authorId" value="" placeholder="Enter Title "></p>
+                        <input type="submit" class="btn btn-primary" id="submit" name="submit" value="Add Book">
                     </form>
                     <br>
-                    <form name="home" method="POST" action="authorController?action=list" > 
+                    <form name="home" method="POST" action="bookController?action=list" > 
                         <input class="btn btn-primary"   type="submit" value="Cancel" />
                     </form>
                 </div>

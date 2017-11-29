@@ -59,11 +59,9 @@ public class AuthorService implements Serializable {
 
     public int deleteAuthorById(String id) throws Exception {
         Integer value = Integer.parseInt(id);
-
         int recsDeleted = getEm().createQuery("delete from Author a where a.authorId=:id")
                 .setParameter("id", value)
                 .executeUpdate();
-
         return recsDeleted;
     }
 
