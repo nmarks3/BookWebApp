@@ -27,7 +27,7 @@ public final class BookController extends HttpServlet {
     private BookFacade bookFacade;
 
     public static final String ACTION = "action";
-    public static final String AUTHOR_ID = "id";
+    public static final String AUTHOR_ID = "authorId";
     public static final String LIST_ACTION = "list";
     public static final String DELETE_ACTION = "delete";
     public static final String ADD_ACTION = "add";
