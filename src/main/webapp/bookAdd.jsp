@@ -29,6 +29,12 @@
                         <p>Title: &nbsp;<input class="form-control" type="text" name="title" id="bookTitle" value="" placeholder="Enter Title "></p>
                         <p>Isbn: &nbsp;<input class="form-control" type="text" name="isbn" id="bookIsbn" value="" placeholder="Enter Isbn "></p>
                         <p>AID &nbsp;<input class="form-control" type="text" name="authorId" id="authorId" value="" placeholder="Enter Title "></p>
+                        <select>
+                             <option value="k">lame</option>
+                        <c:forEach var="a" items="${authorList}">
+                                 <option value="${a.authorId}">${a.authorName}</option>
+                        </c:forEach>
+                        </select>
                         <input type="submit" class="btn btn-primary" id="submit" name="submit" value="Add Book">
                     </form>
                     <br>
