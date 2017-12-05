@@ -27,7 +27,7 @@
                 <div class="col">
                     <h1>Author Update</h1>
                     <form name="update" method ="POST" action = "authorController?action=update">
-                        <input  type="hidden" name="id" value="${id}">            
+                        <input  type="hidden" name="authorId" value="${id}">            
                         Author Name:
                         <br>
                         <input class="form-control" type="text" name="name" value="${authorName}">
