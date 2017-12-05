@@ -6,25 +6,28 @@
 package edu.wctc.distjava.jgl.bookwebapp.controller;
 //
 import edu.wctc.distjava.jgl.bookwebapp.model.Author;
-import edu.wctc.distjava.jgl.bookwebapp.model.AuthorFacade;
+import edu.wctc.distjava.jgl.bookwebapp.model.AuthorService;
+import edu.wctc.distjava.jgl.bookwebapp.model.AuthorService;
 import java.io.IOException;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 @WebServlet(name = "AuthorController", urlPatterns = {"/authorController"})
 public final class AuthorController extends HttpServlet {
-    
-    @EJB
-    private AuthorFacade authorService;
+ 
+    private AuthorService authorService;
     
     public static final String ACTION = "action";
-    public static final String AUTHOR_ID = "id";
+    public static final String AUTHOR_ID = "authorId";
     public static final String LIST_ACTION = "list";
     public static final String DELETE_ACTION = "delete";
     public static final String ADD_ACTION = "add";
@@ -49,7 +52,7 @@ public final class AuthorController extends HttpServlet {
                 authorList = authorService.findAll();
                 request.setAttribute("authorList", authorList);
             } else if(action.equalsIgnoreCase(ADD_ACTION)) {
-                authorService.createAuthor(name);
+                authorService.addAuthor(name);
                 authorList = authorService.findAll();
                 request.setAttribute("authorList", authorList);
             } else if(action.equalsIgnoreCase(DELETE_ACTION)) {
@@ -60,7 +63,7 @@ public final class AuthorController extends HttpServlet {
                 destination = "/authorUpdate.jsp";
                 request.setAttribute("id", id);
                 request.setAttribute("authorName", name);
-                authorService.updateAuthorById(id, name);
+                authorService.updateAuthor(id, name);
             }
         } catch (Exception e) {
             destination = "/authorList.jsp";
@@ -71,9 +74,18 @@ public final class AuthorController extends HttpServlet {
         view.forward(request, response);
     }
 
+//    @Override
+//    public void init() throws ServletException {
+//
+//    }
+    
     @Override
     public void init() throws ServletException {
-
+        // Ask Spring for object to inject
+        ServletContext sctx = getServletContext();
+        
+        WebApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(sctx);
+        authorService = (AuthorService) ctx.getBean("authorService");
     }
 
 //     <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -39,8 +39,8 @@
                                 <td>${a.authorId}</td>
                                 <td>${a.authorName}</td>
                                 <td><fmt:formatDate pattern = "yyyy-MM-dd" value = "${a.dateAdded}" /></td>
-                                <td><a href="authorController?action=update&id=${a.authorId}&name=${a.authorName}"><button type="button" class="btn btn-primary">Update</button></td>
-                                <td><a href="authorController?action=delete&id=${a.authorId}"><button type="button" class="btn btn-danger">Delete</button></a></td>
+                                <td><a href="authorController?action=update&authorId=${a.authorId}&name=${a.authorName}"><button type="button" class="btn btn-primary">Update</button></td>
+                                <td><a href="authorController?action=delete&authorId=${a.authorId}"><button type="button" class="btn btn-danger">Delete</button></a></td>
                             </tr>
 
                         </c:forEach>
