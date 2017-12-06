@@ -25,6 +25,8 @@ public final class BookController extends HttpServlet {
 
     @EJB
     private BookFacade bookFacade;
+    @EJB
+    private AuthorFacade authorFacade;
 
     public static final String ACTION = "action";
     public static final String AUTHOR_ID = "authorId";
@@ -36,6 +38,7 @@ public final class BookController extends HttpServlet {
     public static final String BOOK_ID = "bookId";
     public static final String BOOK_TITLE = "title";
     public static final String BOOK_ISBN = "isbn";
+    public static final String SELECTED_AUTHOR = "selectedAuthor";
 
 ////    // method that requests the database data and executes the user inputs to the database 
     protected final void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -66,14 +69,19 @@ public final class BookController extends HttpServlet {
             if (action.equalsIgnoreCase(LIST_ACTION)) {
                 bookList = bookFacade.findAll();
                 request.setAttribute("bookList", bookList);
+                
             } else if (action.equalsIgnoreCase(ADD_ACTION)) {
+                destination = "/bookAdd.jsp";
                 String title = request.getParameter(BOOK_TITLE);
                 String isbn = request.getParameter(BOOK_ISBN);
-                String authorId = request.getParameter(AUTHOR_ID);
+                String authorId = request.getParameter(SELECTED_AUTHOR);
                 //bookFacade.addOrUpdateNewBook(null, title, isbn, authorId);
                 bookFacade.createBook(title, isbn, authorId);
                 bookList = bookFacade.findAll();
                 request.setAttribute("bookList", bookList);
+                List<Author> authorList = authorFacade.findAll();
+                request.setAttribute("authorList", authorList);
+                
             } else if (action.equalsIgnoreCase(DELETE_ACTION)) {
                 String bookId = request.getParameter(BOOK_ID);
                 // bookFacade.deleteBook(bookId);
@@ -82,16 +90,18 @@ public final class BookController extends HttpServlet {
                 request.setAttribute("bookList", bookList);
             } else if (action.equalsIgnoreCase(UPDATE_ACTION)) {
                 destination = "/bookUpdate.jsp";
-                String title = request.getParameter(BOOK_TITLE);
-                String isbn = request.getParameter(BOOK_ISBN);
-                String authorId = request.getParameter(AUTHOR_ID);
+                
                 String bookId = request.getParameter(BOOK_ID);
+                
+                Book book = bookFacade.find(Integer.parseInt(bookId));                
 
                 request.setAttribute("bookId", bookId);
-                request.setAttribute("title", title);
-                request.setAttribute("isbn", isbn);
-                request.setAttribute("authorId", authorId);
-                bookFacade.updateBookById(bookId, title, isbn, authorId);
+                request.setAttribute("bookTitle", book.getTitle());
+                request.setAttribute("isbn", book.getIsbn());
+                request.setAttribute("author", book.getAuthorId());
+                List<Author> authorList = authorFacade.findAll();
+                request.setAttribute("authorList", authorList);
+                //bookFacade.updateBookById(bookId, title, isbn, authorId);
             }
         } catch (Exception e) {
             destination = "/bookList.jsp";

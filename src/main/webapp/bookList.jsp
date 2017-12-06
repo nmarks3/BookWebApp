@@ -40,7 +40,7 @@
                                 <td>${b.bookId}</td>
                                 <td>${b.title}</td>
                                 <td>${b.isbn}</td>
-                                <td><a href="bookController?action=update&bookId=${b.bookId}&title=${b.title}&isbn=${b.isbn}&authorId=${b.authorId}"><button type="button" class="btn btn-primary">Update</button></td>
+                                <td><a href="bookController?action=update&bookId=${b.bookId}"><button type="button" class="btn btn-primary">Update</button></td>
                                 <td><a href="bookController?action=delete&bookId=${b.bookId}"><button type="button" class="btn btn-danger">Delete</button></a></td>
                             </tr>
 
@@ -49,7 +49,7 @@
                 </table>
                 <h3>${errorMsg}</h3>
 
-                <a href="bookAdd.jsp"><button type="button" class="btn btn-primary">Add Book</button></a>
+                <a href="bookController?action=add"><button type="button" class="btn btn-primary">Add Book</button></a>
             </div>
         </div>
     </body>

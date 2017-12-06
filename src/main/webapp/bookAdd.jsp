@@ -28,9 +28,7 @@
                     <form id=”addBookForm” name=”addBookForm” method="POST" action=bookController?action=add >
                         <p>Title: &nbsp;<input class="form-control" type="text" name="title" id="bookTitle" value="" placeholder="Enter Title "></p>
                         <p>Isbn: &nbsp;<input class="form-control" type="text" name="isbn" id="bookIsbn" value="" placeholder="Enter Isbn "></p>
-                        <p>AID &nbsp;<input class="form-control" type="text" name="authorId" id="authorId" value="" placeholder="Enter Title "></p>
-                        <select>
-                             <option value="k">lame</option>
+                        <select name="selectedAuthor">
                         <c:forEach var="a" items="${authorList}">
                                  <option value="${a.authorId}">${a.authorName}</option>
                         </c:forEach>

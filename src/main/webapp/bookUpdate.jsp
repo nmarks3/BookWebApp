@@ -39,7 +39,10 @@
                         <br> 
                         Author ID:
                         <br>
-                        <input class="form-control" type="text" name="id" value="${id}">
+                        <select name="author">
+                        <c:forEach var="a" items="${authorList}">
+                                 <option value="${a.authorId}">${a.authorName}</option>
+                        </c:forEach>
                         <br> 
                         <input type="submit" class="btn btn-primary" name="submit" value="Submit" onSubmit="alert('Thanks');">
                         <br><br>
