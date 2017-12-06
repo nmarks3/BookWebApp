@@ -7,6 +7,7 @@ package edu.wctc.distjava.jgl.bookwebapp.model;
 
 import edu.wctc.distjava.jgl.bookwebapp.repository.AuthorRepository;
 import edu.wctc.distjava.jgl.bookwebapp.repository.BookRepository;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,6 +28,10 @@ public class BookFacade {
     private AuthorRepository authorRepo;
 
     public BookFacade() {
+    }
+    
+    public List<Book> findAll() {
+        return bookRepo.findAll();
     }
     
     public void addNewBook(String title, String isbn, String authorId) {
