@@ -37,15 +37,18 @@
                         <br>
                         <input class="form-control" type="text" name="isbn" value="${isbn}">
                         <br> 
-                        Author ID:
+                        Author:
                         <br>
-                        <select name="author">
+                        <select name="selectedAuthor">
                         <c:forEach var="a" items="${authorList}">
                                  <option value="${a.authorId}">${a.authorName}</option>
                         </c:forEach>
                         <br> 
                         <input type="submit" class="btn btn-primary" name="submit" value="Submit" onSubmit="alert('Thanks');">
                         <br><br>
+                        <h3>
+                            ${message}
+                        </h3>
                     </form>
                     <form name="home" method="POST" action="bookController?action=list" > 
                         <input class="btn btn-primary"   type="submit" value="Back to Books List" />
