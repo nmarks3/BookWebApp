@@ -5,6 +5,7 @@
 // */
 package edu.wctc.distjava.jgl.bookwebapp.controller;
 //
+
 import edu.wctc.distjava.jgl.bookwebapp.model.Author;
 import edu.wctc.distjava.jgl.bookwebapp.model.AuthorFacade;
 import java.io.IOException;
@@ -19,10 +20,10 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet(name = "AuthorController", urlPatterns = {"/authorController"})
 public final class AuthorController extends HttpServlet {
-    
+
     @EJB
     private AuthorFacade authorService;
-    
+
     public static final String ACTION = "action";
     public static final String AUTHOR_ID = "id";
     public static final String LIST_ACTION = "list";
@@ -30,7 +31,7 @@ public final class AuthorController extends HttpServlet {
     public static final String ADD_ACTION = "add";
     public static final String UPDATE_ACTION = "update";
     public static final String AUTHOR_NAME = "name";
-    
+
 ////    // method that requests the database data and executes the user inputs to the database 
     protected final void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -48,15 +49,15 @@ public final class AuthorController extends HttpServlet {
             if (action.equalsIgnoreCase(LIST_ACTION)) {
                 authorList = authorService.findAll();
                 request.setAttribute("authorList", authorList);
-            } else if(action.equalsIgnoreCase(ADD_ACTION)) {
+            } else if (action.equalsIgnoreCase(ADD_ACTION)) {
                 authorService.createAuthor(name);
                 authorList = authorService.findAll();
                 request.setAttribute("authorList", authorList);
-            } else if(action.equalsIgnoreCase(DELETE_ACTION)) {
+            } else if (action.equalsIgnoreCase(DELETE_ACTION)) {
                 authorService.deleteAuthorById(id);
                 authorList = authorService.findAll();
                 request.setAttribute("authorList", authorList);
-            } else if(action.equalsIgnoreCase(UPDATE_ACTION)) {
+            } else if (action.equalsIgnoreCase(UPDATE_ACTION)) {
                 destination = "/authorUpdate.jsp";
                 request.setAttribute("id", id);
                 request.setAttribute("authorName", name);
