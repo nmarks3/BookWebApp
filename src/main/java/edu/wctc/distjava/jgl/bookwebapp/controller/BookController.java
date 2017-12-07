@@ -69,7 +69,7 @@ public final class BookController extends HttpServlet {
             if (action.equalsIgnoreCase(LIST_ACTION)) {
                 bookList = bookFacade.findAll();
                 request.setAttribute("bookList", bookList);
-                
+
             } else if (action.equalsIgnoreCase(ADD_ACTION)) {
                 destination = "/bookAdd.jsp";
                 String title = request.getParameter(BOOK_TITLE);
@@ -81,7 +81,7 @@ public final class BookController extends HttpServlet {
                 request.setAttribute("bookList", bookList);
                 List<Author> authorList = authorFacade.findAll();
                 request.setAttribute("authorList", authorList);
-                
+
             } else if (action.equalsIgnoreCase(DELETE_ACTION)) {
                 String bookId = request.getParameter(BOOK_ID);
                 // bookFacade.deleteBook(bookId);
@@ -90,18 +90,36 @@ public final class BookController extends HttpServlet {
                 request.setAttribute("bookList", bookList);
             } else if (action.equalsIgnoreCase(UPDATE_ACTION)) {
                 destination = "/bookUpdate.jsp";
-                
-                String bookId = request.getParameter(BOOK_ID);
-                
-                Book book = bookFacade.find(Integer.parseInt(bookId));                
 
+                // finds the book object from the bookId from the bookList.jsp
+                String bookId = request.getParameter(BOOK_ID);
+                Book book = bookFacade.find(Integer.parseInt(bookId));
+
+                // sets the author text edit boxes
                 request.setAttribute("bookId", bookId);
                 request.setAttribute("bookTitle", book.getTitle());
                 request.setAttribute("isbn", book.getIsbn());
                 request.setAttribute("author", book.getAuthorId());
+                
+                // retrieves the author list for the drop down menu
                 List<Author> authorList = authorFacade.findAll();
                 request.setAttribute("authorList", authorList);
-                //bookFacade.updateBookById(bookId, title, isbn, authorId);
+                
+                // title, isbn, and authorId will be null until user hits submit
+                String title = request.getParameter(BOOK_TITLE);
+                String isbn = request.getParameter(BOOK_ISBN);
+                String authorId = request.getParameter(SELECTED_AUTHOR);
+                
+                // check to see if a new title has been assigned, if it has it will update the database
+                if (title != null) {
+                    bookFacade.updateBookById(bookId, title, isbn, authorId);
+                    Book book1 = bookFacade.find(Integer.parseInt(bookId));
+                    request.setAttribute("bookId", bookId);
+                    request.setAttribute("bookTitle", book1.getTitle());
+                    request.setAttribute("isbn", book1.getIsbn());
+                    request.setAttribute("author", book1.getAuthorId());
+                    request.setAttribute("message", "Book Updated Successfully");
+                }
             }
         } catch (Exception e) {
             destination = "/bookList.jsp";
